@@ -1,29 +1,29 @@
 /**
- * Middleware function that checks if the user's role (decoded from JWT) 
- * is included in the list of roles required to access the route.
- * * Usage: router.get('/protected', checkRole(['admin', 'teacher']), handler);
+ * Middleware to check if the authenticated user's role is included
+ * in the list of allowed roles for a specific route.
+ * * @param {Array<string>} roles - An array of allowed role strings (e.g., ['admin', 'teacher']).
+ * @returns {Function} Express middleware function.
  */
-module.exports = (requiredRoles) => (req, res, next) => {
-    // req.user should be populated by the preceding authentication middleware (auth.js)
-    if (!req.user || !req.user.role) {
-        // This should theoretically not be hit if auth middleware runs first, 
-        // but acts as a safeguard.
-        return res.status(403).json({ 
-            message: 'Access denied. Role information missing.' 
-        });
-    }
+const checkRole = (roles) => {
+    return (req, res, next) => {
+        // req.user is attached by the auth middleware (which runs first)
+        if (!req.user || !req.user.role) {
+            // Should theoretically be caught by auth middleware, but added for safety
+            return res.status(403).json({ message: 'Authorization failed: User data missing.' });
+        }
 
-    const userRole = req.user.role.toLowerCase();
-
-    // Check if the user's role is included in the list of allowed roles
-    if (requiredRoles.map(r => r.toLowerCase()).includes(userRole)) {
-        // Role is valid, proceed to the next middleware or route handler
-        next();
-    } else {
-        // Role is not authorized for this route
-        console.log(`Authorization Failed: User role '${userRole}' cannot access required roles: ${requiredRoles.join(', ')}`);
-        return res.status(403).json({ 
-            message: 'You do not have permission to view this page or an error occurred.' 
-        });
-    }
+        // Check if the user's role is included in the allowed roles array
+        if (roles.includes(req.user.role)) {
+            next(); // User is authorized, proceed to the next middleware/handler
+        } else {
+            // User is authenticated but does not have the required role
+            return res.status(403).json({ 
+                message: 'You do not have permission to perform this action.',
+                required_roles: roles,
+                user_role: req.user.role
+            });
+        }
+    };
 };
+
+module.exports = checkRole;

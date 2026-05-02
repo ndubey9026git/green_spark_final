@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 import API from '../api/api';
 import BackToLearnButton from './BackToLearnButton';
 import RecycleRush from './RecycleRush'; 
-import EcoCitySimulator from './EcoCitySimulator'; // Ensures simulator is loaded
+import EcoCitySimulator from './EcoCitySimulator';
+import EcosystemSimulator from './EcosystemSimulator';
 import './GamePlayer.css';
 
 const GamePlayer = () => {
@@ -47,6 +48,9 @@ const GamePlayer = () => {
       }
       if (title === "ECO-CITY BUILDER: 3D MISSION") {
           return <EcoCitySimulator gameId={game._id} gameData={game} />;
+      }
+      if (title === "ECOSYSTEM BALANCE SIMULATOR" || title === "ECOSYSTEM SIMULATOR") {
+          return <EcosystemSimulator gameId={game._id} />;
       }
       
       // 2. Check for External Games (iFrame Embed)

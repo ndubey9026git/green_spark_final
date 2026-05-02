@@ -21,6 +21,14 @@ const UserSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Challenge',
     default: [],
+  },
+
+  // Daily Streak System
+  streak: {
+    currentStreak: { type: Number, default: 0 },
+    longestStreak: { type: Number, default: 0 },
+    lastLoginDate: { type: Date, default: null },
+    loginHistory: { type: [Date], default: [] }
   }
 
 }, { timestamps: true });

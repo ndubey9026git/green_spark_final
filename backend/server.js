@@ -23,6 +23,8 @@ const allowedOrigins = [
     'https://green-spark-full-stack-5hmhglll3.vercel.app', 
     // Local Development URL
     'http://localhost:3000', 
+    // Vite Development URL
+    'http://localhost:5173',
 ];
 
 const corsOptions = {
@@ -57,10 +59,11 @@ const teacherRoutes = require('./routes/teacher');
 const studentRoutes = require('./routes/student');
 const assignmentsRoutes = require('./routes/assignments');
 const challengesRoutes = require('./routes/challenges');
-const gameRoutes = require('./routes/game');
+const gamesRoutes = require('./routes/games');
 const leaderboardRoutes = require('./routes/leaderboard');
 const learnRoutes = require('./routes/learn');
 const mediaRoutes = require('./routes/media');
+const notificationRoutes = require('./routes/notifications');
 
 // --- 5. Route Mounting ---
 // All API endpoints are prefixed with '/api'
@@ -70,10 +73,12 @@ app.use('/api/teacher', teacherRoutes); // Teacher Panel access
 app.use('/api/student', studentRoutes); // Student Panel access
 app.use('/api/assignments', assignmentsRoutes);
 app.use('/api/challenges', challengesRoutes);
-app.use('/api/game', gameRoutes);
+app.use('/api/games', gamesRoutes);
+app.use('/api/game', gamesRoutes); // backward compatibility
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/learn', learnRoutes);
 app.use('/api/media', mediaRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // --- 6. Basic Route for Health Check ---
 app.get('/', (req, res) => {

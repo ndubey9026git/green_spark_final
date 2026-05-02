@@ -28,9 +28,9 @@ export default function Dashboard() {
   const [chatbotOpen, setChatbotOpen] = useState(false);
   const [toast, setToast] = useState(null);
   const [completingId, setCompletingId] = useState(null);
-  const navigate = useNavigate();
-  
-  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2000); };
+  const [notifications, setNotifications] = useState([]);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const navigate = useNavigate();
 
   const fetchProfile = async () => {
     try {
@@ -44,40 +44,52 @@ export default function Dashboard() {
     }
   };
 
-  useEffect(() => {
-    const fetchChallenges = async () => {
-      try {
-        const challengesRes = await API.get("/challenges");
-        setChallenges(challengesRes.data);
-      } catch (err) {
-        console.error("Failed to fetch challenges:", err);
-      }
-    };
-    fetchProfile();
-    fetchChallenges();
-  }, []);
+  const fetchNotifications = async () => {
+    try {
+      const notificationsRes = await API.get('/notifications');
+      const items = notificationsRes.data || [];
+      setNotifications(items);
+      setUnreadNotifications(items.filter(item => !item.read).length);
+    } catch (err) {
+      console.error('Failed to fetch notifications:', err);
+    }
+  };
 
-  const handleLogout = async () => {
-    try {
-      await API.post("/auth/logout");
-      localStorage.clear();
-      navigate("/");
-    } catch (err) {
-      console.error("Logout failed:", err);
-    }
-  };
+  const markNotificationRead = async (id) => {
+    try {
+      await API.put(`/notifications/${id}/read`);
+      setNotifications((prev) => prev.map((item) => item._id === id ? { ...item, read: true } : item));
+      setUnreadNotifications((prev) => Math.max(0, prev - 1));
+    } catch (err) {
+      console.error('Failed to mark notification read:', err);
+    }
+  };
 
-  const handleProfileSave = async (updatedUser) => {
-    try {
-      await API.put("/auth/profile", updatedUser);
-      setUser(prev => ({...prev, ...updatedUser}));
-      showToast("Profile updated successfully!");
-    } catch (err) {
-      showToast("Failed to update profile.");
-    } finally {
-      setProfileOpen(false);
-    }
-  };
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        const challengesRes = await API.get("/challenges");
+        setChallenges(challengesRes.data);
+      } catch (err) {
+        console.error("Failed to fetch challenges:", err);
+      }
+    };
+    fetchProfile();
+    fetchChallenges();
+    fetchNotifications();
+  }, []);
+
+  const handleProfileSave = async (updatedUser) => {
+    try {
+      await API.put("/auth/profile", updatedUser);
+      setUser(prev => ({ ...prev, ...updatedUser }));
+      showToast("Profile updated successfully!");
+    } catch (err) {
+      showToast("Failed to update profile.");
+    } finally {
+      setProfileOpen(false);
+    }
+  };
   
   const handleShare = async () => {
      const shareText = `I’ve earned ${user.ecoPoints} eco points on GreenSpark! 🌱 Badges: ${(user.badges || []).join(", ")}`;
@@ -91,7 +103,18 @@ export default function Dashboard() {
     }
   };
 
-  const certCanvasRef = useRef(null);
+  const handleLogout = async () => {
+    try {
+      await API.post("/auth/logout");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    } finally {
+      localStorage.clear();
+      navigate("/");
+    }
+  };
+
+  const certCanvasRef = useRef(null);
   const downloadCertificate = (badgeName) => {
     const canvas = certCanvasRef.current; if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -133,7 +156,54 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
       <canvas ref={certCanvasRef} style={{ display: "none" }} />
       <Header user={user} onLogout={handleLogout} onShare={handleShare} />
-      
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white p-5 rounded-3xl shadow-md mb-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-widest text-gray-500">Notifications</p>
+              <h2 className="text-xl font-semibold text-gray-900">{unreadNotifications} unread notification{unreadNotifications === 1 ? '' : 's'}</h2>
+            </div>
+            <button
+              type="button"
+              onClick={() => notifications.filter(n => !n.read).forEach((n) => markNotificationRead(n._id))}
+              className="inline-flex items-center justify-center rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 transition"
+            >
+              Mark all read
+            </button>
+          </div>
+
+          <div className="mt-4 space-y-3">
+            {notifications.length === 0 ? (
+              <p className="text-sm text-gray-500">No notifications yet. New updates will appear here.</p>
+            ) : (
+              notifications.slice(0, 3).map((notification) => (
+                <div
+                  key={notification._id}
+                  className={`rounded-2xl p-4 border ${notification.read ? 'border-gray-200 bg-gray-50' : 'border-green-200 bg-green-50'}`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold text-gray-900">{notification.title}</p>
+                      <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                    </div>
+                    {!notification.read && (
+                      <button
+                        type="button"
+                        onClick={() => markNotificationRead(notification._id)}
+                        className="text-green-700 text-sm font-semibold hover:underline"
+                      >
+                        Mark read
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">{new Date(notification.createdAt).toLocaleString()}</p>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
       <main className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
         <motion.div initial="hidden" animate="visible" variants={{hidden: {opacity:0}, visible: {opacity:1, transition: {staggerChildren: 0.1}}}}>
           <motion.h1 variants={{hidden:{opacity:0, y:20}, visible:{opacity:1, y:0}}} className="text-4xl font-bold mb-2">Welcome back, {user.name}!</motion.h1>
@@ -142,9 +212,7 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
             <ProfileCard user={user} onEdit={() => setProfileOpen(true)} />
             <StatsCard ecoPoints={user.ecoPoints} />
-          </div>
-
-          <motion.div variants={{hidden:{opacity:0, y:20}, visible:{opacity:1, y:0}}} className="bg-white p-6 rounded-2xl shadow-lg mb-6">
+            <StreakCard streak={user.streak} />
             <h2 className="text-2xl font-bold mb-4">🏅 Badges</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {BADGE_RULES.map((badge) => (
@@ -156,36 +224,36 @@ export default function Dashboard() {
                 />
               ))}
             </div>
-          </motion.div>
+          </div>
+        </motion.div>
 
-          <motion.div variants={{hidden:{opacity:0, y:20}, visible:{opacity:1, y:0}}}>
-            <h2 className="text-2xl font-bold mb-4">🌍 Challenges</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {challenges.map((challenge) => (
-                <ChallengeCard 
-                   key={challenge._id} 
-                   challenge={challenge} 
-                   isCompleted={(user.completed || []).includes(challenge._id)}
-                   isCompleting={completingId === challenge._id}
-                   onComplete={async () => {
-                     setCompletingId(challenge._id);
-                     try {
-                       await API.post("/challenges/complete", { challengeId: challenge._id });
-                       await fetchProfile();
-                       showToast(`+${challenge.points} pts!`);
-                     } catch (err) {
-                       console.error("Failed to complete challenge:", err);
-                       showToast(err.response?.data?.message || "Action failed.");
-                     } finally {
-                       setCompletingId(null);
-                     }
-                   }}
-                />
-              ))}
-            </div>
-          </motion.div>
-        </motion.div>
-      </main>
+        <motion.div variants={{hidden:{opacity:0, y:20}, visible:{opacity:1, y:0}}}>
+          <h2 className="text-2xl font-bold mb-4">🌍 Challenges</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {challenges.map((challenge) => (
+              <ChallengeCard
+                key={challenge._id}
+                challenge={challenge}
+                isCompleted={(user.completed || []).includes(challenge._id)}
+                isCompleting={completingId === challenge._id}
+                onComplete={async () => {
+                  setCompletingId(challenge._id);
+                  try {
+                    await API.post("/challenges/complete", { challengeId: challenge._id });
+                    await fetchProfile();
+                    showToast(`+${challenge.points} pts!`);
+                  } catch (err) {
+                    console.error("Failed to complete challenge:", err);
+                    showToast(err.response?.data?.message || "Action failed.");
+                  } finally {
+                    setCompletingId(null);
+                  }
+                }}
+              />
+            ))}
+          </div>
+        </motion.div>
+      </main>
       
       <AnimatePresence>
         {profileOpen && <ProfileModal user={user} onClose={() => setProfileOpen(false)} onSave={handleProfileSave} />}
@@ -263,38 +331,77 @@ const StatsCard = ({ ecoPoints }) => {
   );
 };
 
+const StreakCard = ({ streak }) => {
+  const currentStreak = streak?.currentStreak || 0;
+  const longestStreak = streak?.longestStreak || 0;
+  
+  return (
+    <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-2xl shadow-lg border border-orange-200">
+      <h3 className="text-xl font-bold text-orange-800">🔥 Daily Streak</h3>
+      <div className="flex items-center justify-center mt-4">
+        <div className="text-center">
+          <p className="text-6xl font-bold text-orange-500">{currentStreak}</p>
+          <p className="text-sm text-orange-700 mt-1">day streak</p>
+        </div>
+      </div>
+      <div className="mt-4 pt-4 border-t border-orange-200">
+        <p className="text-sm text-gray-600">
+          <span className="font-semibold">🏆 Best:</span> {longestStreak} days
+        </p>
+      </div>
+      {currentStreak >= 7 && (
+        <div className="mt-3 bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full text-center">
+          🎉 Week Warrior!
+        </div>
+      )}
+      {currentStreak >= 30 && (
+        <div className="mt-3 bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full text-center">
+          🌟 Monthly Master!
+        </div>
+      )}
+    </div>
+  );
+};
+
 const BadgeCard = ({ badge, owned, onDownload }) => (
-  <motion.div className={`p-5 rounded-xl border-2 flex items-center gap-4 transition-all ${owned ? 'border-yellow-400 bg-yellow-50 shadow-md' : 'border-gray-200 bg-gray-50'}`} whileHover={{scale: 1.03}}>
-    <span className="text-4xl">{badge.emoji}</span>
-    <div className="flex-1">
-      <p className={`font-bold ${owned ? 'text-yellow-900' : 'text-gray-700'}`}>{badge.name}</p>
-      <p className="text-xs text-gray-500">{owned ? 'Unlocked!' : `Unlock at ${badge.threshold} pts`}</p>
-    </div>
-    <button onClick={onDownload} disabled={!owned} className="p-2 bg-green-500 text-white rounded-full hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition" title={owned ? "Download Certificate" : "Earn more points to unlock"}>
-      <DownloadIcon />
-    </button>
-  </motion.div>
+  <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-200 flex flex-col items-center text-center">
+    <div className="text-5xl mb-4">{badge.emoji}</div>
+    <h3 className="text-xl font-semibold mb-2">{badge.name}</h3>
+    <p className="text-sm text-gray-500 mb-4">Earn {badge.threshold} eco points to unlock.</p>
+    <div className={`mb-4 px-3 py-2 rounded-full text-xs font-semibold ${owned ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+      {owned ? 'Unlocked' : 'Locked'}
+    </div>
+    <button
+      type="button"
+      onClick={onDownload}
+      disabled={!owned}
+      className={`w-full px-4 py-2 text-sm font-semibold rounded-lg transition ${owned ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
+    >
+      {owned ? 'Download Certificate' : 'Locked'}
+    </button>
+  </div>
 );
 
-const ChallengeCard = ({ challenge, isCompleted, isCompleting, onComplete }) => {
-   return (
-    <motion.div 
-      className={`p-5 rounded-2xl shadow-lg flex flex-col items-center text-center transition ${isCompleted ? 'bg-gray-200 opacity-70' : 'bg-white'}`} 
-      whileHover={isCompleted || isCompleting ? {} : { scale: 1.05, y: -5 }}
-    >
-      <span className="text-5xl mb-3">{challenge.icon}</span>
-      <p className="font-bold mb-1 flex-grow">{challenge.title}</p>
-      <p className="text-sm text-green-600 font-semibold mb-4">+{challenge.points} pts</p>
-      <button 
-        onClick={onComplete} 
-        disabled={isCompleted || isCompleting}
-        className="w-full px-4 py-2 text-sm font-bold text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
-      >
-        {isCompleted ? 'Completed ✅' : isCompleting ? 'Completing...' : 'Complete'}
-      </button>
-    </motion.div>
-   )
-};
+const ChallengeCard = ({ challenge, isCompleted, isCompleting, onComplete }) => (
+  <motion.div
+    className="bg-white p-6 rounded-3xl shadow-lg border border-gray-200 flex flex-col"
+    whileHover={isCompleted || isCompleting ? {} : { scale: 1.05, y: -5 }}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+  >
+    <span className="text-5xl mb-3">{challenge.icon || '🌿'}</span>
+    <p className="font-bold mb-1 flex-grow">{challenge.title}</p>
+    <p className="text-sm text-green-600 font-semibold mb-4">+{challenge.points} pts</p>
+    <button
+      onClick={onComplete}
+      disabled={isCompleted || isCompleting}
+      className="w-full px-4 py-2 text-sm font-bold text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+    >
+      {isCompleted ? 'Completed ✅' : isCompleting ? 'Completing...' : 'Complete'}
+    </button>
+  </motion.div>
+);
 
 const ProfileModal = ({ user, onClose, onSave }) => {
   const [name, setName] = useState(user.name);

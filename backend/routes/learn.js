@@ -1,16 +1,19 @@
-// backend/routes/learn.js
-
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/authMiddleware');
+// Standardized middleware imports
+const auth = require('../middleware/authMiddleware'); 
+const checkRole = require('../middleware/checkRole'); 
+
 const Lesson = require('../models/Lesson');
 const Quiz = require('../models/Quiz');
 const User = require('../models/User');
 
+const ADMIN_TEACHER = ['admin', 'teacher'];
+
 /**
- * @route   GET /api/learn/lessons
- * @desc    Get a list of all lessons
- * @access  Public
+ * @route   GET /api/learn/lessons
+ * @desc    Get a list of all lessons
+ * @access  Public
  */
 router.get('/lessons', async (req, res) => {
     try {
@@ -23,9 +26,9 @@ router.get('/lessons', async (req, res) => {
 });
 
 /**
- * @route   GET /api/learn/lessons/:id
- * @desc    Get a single lesson by its ID, including its quiz questions
- * @access  Private
+ * @route   GET /api/learn/lessons/:id
+ * @desc    Get a single lesson by its ID, including its quiz questions
+ * @access  Private
  */
 router.get('/lessons/:id', auth, async (req, res) => {
     try {
@@ -34,6 +37,7 @@ router.get('/lessons/:id', auth, async (req, res) => {
             return res.status(404).json({ message: 'Lesson not found.' });
         }
         
+        // Ensure we don't return the correct answer to the client for the quiz display
         const quiz = await Quiz.findOne({ lesson: lesson._id })
             .select('-questions.correctAnswer'); 
         
@@ -45,9 +49,9 @@ router.get('/lessons/:id', auth, async (req, res) => {
 });
 
 /**
- * @route   POST /api/learn/quizzes/:quizId/submit
- * @desc    Submit answers for a quiz and get a score
- * @access  Private
+ * @route   POST /api/learn/quizzes/:quizId/submit
+ * @desc    Submit answers for a quiz and get a score
+ * @access  Private
  */
 router.post('/quizzes/:quizId/submit', auth, async (req, res) => {
     try {
@@ -75,7 +79,7 @@ router.post('/quizzes/:quizId/submit', auth, async (req, res) => {
             user.ecoPoints += quiz.pointsAwarded;
             await user.save();
             return res.json({
-                message: `Congratulations! You scored ${score}/${totalQuestions}.`,
+                message: `Congratulations! You scored ${score}/${totalQuestions}. You earned ${quiz.pointsAwarded} Eco Points.`,
                 pointsAwarded: quiz.pointsAwarded
             });
         } else {
@@ -91,14 +95,11 @@ router.post('/quizzes/:quizId/submit', auth, async (req, res) => {
 });
 
 /**
- * @route   GET /api/learn/admin/lessons
- * @desc    Get all lessons for admin/teacher management
- * @access  Admin and Teacher
+ * @route   GET /api/learn/admin/lessons
+ * @desc    Get all lessons for admin/teacher management
+ * @access  Admin and Teacher
  */
-router.get('/admin/lessons', auth, async (req, res) => {
-    if (!['admin', 'teacher'].includes(req.user.role)) {
-        return res.status(403).json({ msg: 'Authorization denied' });
-    }
+router.get('/admin/lessons', auth, checkRole(ADMIN_TEACHER), async (req, res) => {
     try {
         const lessons = await Lesson.find({});
         const lessonsWithQuizzes = await Promise.all(lessons.map(async (lesson) => {
@@ -113,29 +114,23 @@ router.get('/admin/lessons', auth, async (req, res) => {
 });
 
 /**
- * @route   POST /api/learn/admin/lessons
- * @desc    Create a new lesson and its associated quiz
- * @access  Admin and Teacher
+ * @route   POST /api/learn/admin/lessons
+ * @desc    Create a new lesson and its associated quiz
+ * @access  Admin and Teacher
  */
-router.post('/admin/lessons', auth, async (req, res) => {
-    if (!['admin', 'teacher'].includes(req.user.role)) {
-        return res.status(403).json({ msg: 'Authorization denied' });
-    }
+router.post('/admin/lessons', auth, checkRole(ADMIN_TEACHER), async (req, res) => {
     const { title, category, content, questions } = req.body;
 
-    // ✅ FIX: Check if required fields are present
     if (!title || !category || !content) {
         return res.status(400).json({ msg: 'Please enter all fields for the lesson.' });
     }
     
-    // ✅ NEW DEBUGGING STEP: Log the received data to the backend console
     console.log("Received data:", req.body);
 
     try {
         const newLesson = new Lesson({ title, category, content });
         await newLesson.save();
 
-        // ✅ FIX: Only try to save a quiz if questions are provided and valid
         if (questions && questions.length > 0 && questions.every(q => q.question && q.options.length > 0)) {
             const newQuiz = new Quiz({
                 lesson: newLesson._id,
@@ -153,14 +148,11 @@ router.post('/admin/lessons', auth, async (req, res) => {
 });
 
 /**
- * @route   PUT /api/learn/admin/lessons/:id
- * @desc    Update an existing lesson and its quiz
- * @access  Admin and Teacher
+ * @route   PUT /api/learn/admin/lessons/:id
+ * @desc    Update an existing lesson and its quiz
+ * @access  Admin and Teacher
  */
-router.put('/admin/lessons/:id', auth, async (req, res) => {
-    if (!['admin', 'teacher'].includes(req.user.role)) {
-        return res.status(403).json({ msg: 'Authorization denied' });
-    }
+router.put('/admin/lessons/:id', auth, checkRole(ADMIN_TEACHER), async (req, res) => {
     const { title, category, content, questions } = req.body;
 
     try {
@@ -177,7 +169,7 @@ router.put('/admin/lessons/:id', auth, async (req, res) => {
         const quiz = await Quiz.findOneAndUpdate(
             { lesson: req.params.id },
             { questions },
-            { new: true }
+            { new: true, upsert: true } // Upsert ensures a quiz is created if it doesn't exist
         );
 
         res.json({ lesson, quiz });
@@ -188,15 +180,11 @@ router.put('/admin/lessons/:id', auth, async (req, res) => {
 });
 
 /**
- * @route   DELETE /api/learn/admin/lessons/:id
- * @desc    Delete a lesson and its quiz
- * @access  Admin and Teacher
+ * @route   DELETE /api/learn/admin/lessons/:id
+ * @desc    Delete a lesson and its quiz
+ * @access  Admin and Teacher
  */
-router.delete('/admin/lessons/:id', auth, async (req, res) => {
-    if (!['admin', 'teacher'].includes(req.user.role)) {
-        return res.status(403).json({ msg: 'Authorization denied' });
-    }
-
+router.delete('/admin/lessons/:id', auth, checkRole(ADMIN_TEACHER), async (req, res) => {
     try {
         await Lesson.findByIdAndDelete(req.params.id);
         await Quiz.findOneAndDelete({ lesson: req.params.id });
