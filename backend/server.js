@@ -32,14 +32,18 @@ async function connectWithRetry(retries = 5, delayMs = 3000) {
 if (mongoUri) connectWithRetry(); else console.error('MONGO_URI is not set in environment variables');
 
 // --- 2. CORS Configuration ---
+const normalizeOrigin = (origin) => origin?.trim().replace(/\/+$|^\s+|\s+$/g, '');
 const allowedOriginsEnv = process.env.ALLOWED_ORIGINS || 'http://localhost:3000,http://localhost:5173';
-const allowedOrigins = allowedOriginsEnv.split(',').map((s) => s.trim()).filter(Boolean);
+const allowedOrigins = allowedOriginsEnv
+  .split(',')
+  .map((s) => normalizeOrigin(s))
+  .filter(Boolean);
 
 const corsOptions = {
   origin: (origin, callback) => {
     // Allow requests with no origin (like server-to-server or curl)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
+    if (allowedOrigins.includes(normalizeOrigin(origin))) return callback(null, true);
     console.warn(`Blocked CORS request from origin: ${origin}`);
     return callback(new Error('Not allowed by CORS'));
   },
