@@ -17,6 +17,10 @@ import LessonViewer from "./pages/LessonViewer";
 import ManageLessons from "./components/ManageLessons";
 import VideoPlayer from "./components/VideoPlayer";
 import GamePlayer from "./components/GamePlayer";
+import CarbonTracker from "./pages/CarbonTracker";
+import GreenGridSandbox from "./components/GreenGridSandbox";
+import CarbonCaptureSandbox from "./components/CarbonCaptureSandbox";
+import BioreactorSandbox from "./components/BioreactorSandbox";
 
 // --- Auth Gate Helpers ---
 function isAuthed() {
@@ -82,6 +86,46 @@ export default function App() {
             element={
               <PrivateRoute>
                 <Leaderboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/carbon-tracker"
+            element={
+              <PrivateRoute>
+                <CarbonTracker />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/grid-simulator"
+            element={
+              <PrivateRoute>
+                <GreenGridSandbox />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/dac-simulator"
+            element={
+              <PrivateRoute>
+                <CarbonCaptureSandbox />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/bioreactor-simulator"
+            element={
+              <PrivateRoute>
+                <BioreactorSandbox />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/bioreactor-simulator"
+            element={
+              <PrivateRoute>
+                <BioreactorSandbox />
               </PrivateRoute>
             }
           />

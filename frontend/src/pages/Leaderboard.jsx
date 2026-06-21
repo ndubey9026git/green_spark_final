@@ -5,18 +5,8 @@ import { Link } from "react-router-dom";
 import API from "../api/api";
 import { motion } from "framer-motion";
 
-// Simple Trophy Icon that changes color based on rank
-const TrophyIcon = ({ rank }) => {
-  const color =
-    rank === 1 ? "text-yellow-400" :
-    rank === 2 ? "text-gray-400" :
-    rank === 3 ? "text-yellow-600" : "text-gray-300";
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" className={`h-8 w-8 ${color}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M16 8v8m-3-5v5m-3-2v2m-2 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-    </svg>
-  );
-};
+// Medal icons for top 3
+const MEDALS = ["🥇", "🥈", "🥉"];
 
 export default function Leaderboard() {
   const [leaders, setLeaders] = useState([]);
@@ -39,10 +29,9 @@ export default function Leaderboard() {
     fetchLeaderboard();
   }, []);
 
-  // Animation variants for the list
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.07 } },
+    visible: { opacity: 1, transition: { staggerChildren: 0.06 } },
   };
 
   const itemVariants = {
@@ -51,50 +40,158 @@ export default function Leaderboard() {
   };
 
   if (loading) {
-    return <div className="text-center p-10 font-semibold text-gray-500">Loading Leaderboard...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "linear-gradient(135deg, #ecfdf5, #d1fae5, #a7f3d0)" }}>
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
+          <motion.span className="text-5xl block mb-4" animate={{ rotate: [0, 360] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>🏆</motion.span>
+          <p className="text-emerald-700 font-semibold">Loading Leaderboard...</p>
+        </motion.div>
+      </div>
+    );
   }
 
   if (error) {
     return <div className="text-center p-10 text-red-500">{error}</div>;
   }
 
+  // Top 3 for podium
+  const top3 = leaders.slice(0, 3);
+  const rest = leaders.slice(3);
+
   return (
-    <div className="min-h-screen bg-green-50 p-4 sm:p-8">
-      <motion.div 
+    <div className="min-h-screen p-4 sm:p-8" style={{ background: "linear-gradient(135deg, #ecfdf5, #d1fae5, #a7f3d0)" }}>
+      <motion.div
         className="max-w-4xl mx-auto"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-4xl font-bold text-green-800">🏆 Leaderboard</h1>
-          <Link to="/dashboard" className="px-4 py-2 bg-white text-green-700 font-semibold rounded-lg shadow-md hover:bg-gray-100 transition">
-            ← Back to Dashboard
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-4xl font-extrabold text-emerald-800 flex items-center gap-3">
+              <span className="text-5xl">🏆</span> Leaderboard
+            </h1>
+            <p className="text-sm text-emerald-600/70 mt-1">Top sustainability champions</p>
+          </div>
+          <Link
+            to="/dashboard"
+            className="px-5 py-2.5 font-semibold text-sm rounded-xl shadow-md transition-all hover:shadow-lg"
+            style={{
+              background: "rgba(255,255,255,0.6)",
+              backdropFilter: "blur(12px)",
+              border: "1px solid rgba(255,255,255,0.4)",
+            }}
+          >
+            ← Dashboard
           </Link>
         </div>
-        
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <motion.ul
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
+
+        {/* Podium for Top 3 */}
+        {top3.length >= 3 && (
+          <div className="flex items-end justify-center gap-4 mb-10">
+            {/* 2nd Place */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="flex flex-col items-center"
+            >
+              <img
+                src={top3[1].avatar || `https://api.dicebear.com/8.x/micah/svg?seed=${top3[1].name}`}
+                alt={top3[1].name}
+                className="w-14 h-14 rounded-full border-3 border-gray-300 bg-gray-100 mb-2"
+              />
+              <p className="text-xs font-bold text-slate-700 truncate max-w-[80px]">{top3[1].name}</p>
+              <p className="text-xs text-emerald-600 font-bold">{top3[1].ecoPoints} pts</p>
+              <div className="mt-2 w-24 h-20 rounded-t-xl flex items-center justify-center text-3xl"
+                style={{ background: "linear-gradient(to top, #d1d5db, #e5e7eb)" }}>
+                🥈
+              </div>
+            </motion.div>
+
+            {/* 1st Place */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="flex flex-col items-center"
+            >
+              <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                <img
+                  src={top3[0].avatar || `https://api.dicebear.com/8.x/micah/svg?seed=${top3[0].name}`}
+                  alt={top3[0].name}
+                  className="w-20 h-20 rounded-full border-4 border-yellow-400 bg-gray-100 mb-2 shadow-lg"
+                />
+              </motion.div>
+              <p className="text-sm font-extrabold text-slate-800">{top3[0].name}</p>
+              <p className="text-sm text-emerald-600 font-bold">{top3[0].ecoPoints} pts</p>
+              <div className="mt-2 w-28 h-28 rounded-t-xl flex items-center justify-center text-4xl"
+                style={{ background: "linear-gradient(to top, #fbbf24, #fcd34d)" }}>
+                🥇
+              </div>
+            </motion.div>
+
+            {/* 3rd Place */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col items-center"
+            >
+              <img
+                src={top3[2].avatar || `https://api.dicebear.com/8.x/micah/svg?seed=${top3[2].name}`}
+                alt={top3[2].name}
+                className="w-14 h-14 rounded-full border-3 border-amber-600 bg-gray-100 mb-2"
+              />
+              <p className="text-xs font-bold text-slate-700 truncate max-w-[80px]">{top3[2].name}</p>
+              <p className="text-xs text-emerald-600 font-bold">{top3[2].ecoPoints} pts</p>
+              <div className="mt-2 w-24 h-16 rounded-t-xl flex items-center justify-center text-3xl"
+                style={{ background: "linear-gradient(to top, #d97706, #f59e0b)" }}>
+                🥉
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Full List */}
+        <div className="rounded-2xl shadow-xl overflow-hidden"
+          style={{
+            background: "rgba(255, 255, 255, 0.6)",
+            backdropFilter: "blur(16px)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+          }}
+        >
+          <motion.ul variants={containerVariants} initial="hidden" animate="visible">
             {leaders.map((leader, index) => (
               <motion.li
                 key={leader._id || index}
                 variants={itemVariants}
-                className="flex items-center p-4 border-b border-gray-100 last:border-b-0 hover:bg-lime-50 transition"
+                className={`flex items-center p-4 border-b border-slate-100/50 last:border-b-0 hover:bg-emerald-50/40 transition ${
+                  index < 3 ? "bg-gradient-to-r from-emerald-50/40 to-transparent" : ""
+                }`}
               >
-                <div className="w-12 text-2xl font-bold text-gray-400 text-center">{index + 1}</div>
-                <div className="w-16 flex justify-center">
-                   <TrophyIcon rank={index + 1} />
+                <div className="w-12 text-center">
+                  {index < 3 ? (
+                    <span className="text-2xl">{MEDALS[index]}</span>
+                  ) : (
+                    <span className="text-lg font-bold text-slate-400">#{index + 1}</span>
+                  )}
                 </div>
-                <div className="flex-1">
-                  <p className="text-lg font-semibold text-gray-800">{leader.name}</p>
-                  <p className="text-sm text-gray-500 capitalize">{leader.role}</p>
+                <div className="w-12 flex justify-center">
+                  <img
+                    src={leader.avatar || `https://api.dicebear.com/8.x/micah/svg?seed=${leader.name}`}
+                    alt={leader.name}
+                    className="w-10 h-10 rounded-full border-2 border-emerald-200 bg-gray-100"
+                  />
                 </div>
-                <div className="text-xl font-bold text-green-600">
-                  {leader.ecoPoints} <span className="text-sm font-normal">pts</span>
+                <div className="flex-1 ml-3">
+                  <p className="text-sm font-bold text-slate-800">{leader.name}</p>
+                  <p className="text-xs text-slate-400 capitalize">{leader.role}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-lg font-extrabold text-emerald-600">{leader.ecoPoints}</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-wide">points</p>
                 </div>
               </motion.li>
             ))}

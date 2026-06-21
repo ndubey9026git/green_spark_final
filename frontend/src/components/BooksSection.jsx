@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import API from '../api/api';
+import { API_BASE } from '../config';
 import BackToLearnButton from './BackToLearnButton'; // ✅ UPDATED
 
 const BooksSection = () => {
@@ -60,10 +61,10 @@ const BooksSection = () => {
                             >
                                 <h4>{book.title}</h4>
                                 <p>{book.description}</p>
-                                <a 
-                                    href={`http://localhost:5000${book.fileUrl}`} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
+                                <a
+                                    href={`${API_BASE.replace(/\/api\/?$/, '')}${book.fileUrl}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="media-link"
                                 >
                                     Download Book

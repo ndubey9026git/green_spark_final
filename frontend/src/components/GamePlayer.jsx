@@ -6,6 +6,9 @@ import BackToLearnButton from './BackToLearnButton';
 import RecycleRush from './RecycleRush'; 
 import EcoCitySimulator from './EcoCitySimulator';
 import EcosystemSimulator from './EcosystemSimulator';
+import GreenGridSandbox from './GreenGridSandbox';
+import CarbonCaptureSandbox from './CarbonCaptureSandbox';
+import BioreactorSandbox from './BioreactorSandbox';
 import './GamePlayer.css';
 
 const GamePlayer = () => {
@@ -51,6 +54,15 @@ const GamePlayer = () => {
       }
       if (title === "ECOSYSTEM BALANCE SIMULATOR" || title === "ECOSYSTEM SIMULATOR") {
           return <EcosystemSimulator gameId={game._id} />;
+      }
+      if (title === "RENEWABLE ENERGY GRID SIMULATOR" || title === "RENEWABLE ENERGY GRID ENGINEERING SIMULATOR" || title === "GREEN GRID SIMULATOR") {
+          return <GreenGridSandbox gameId={game._id} />;
+      }
+      if (title === "WASTE-TO-ENERGY BIOREACTOR") {
+            return <BioreactorSandbox gameId={game._id} />;
+        }
+      if (title === "DIRECT AIR CAPTURE SIMULATOR" || title === "CARBON CAPTURE SIMULATOR" || title === "DIRECT AIR CAPTURE CHEMICAL SANDBOX") {
+          return <CarbonCaptureSandbox gameId={game._id} />;
       }
       
       // 2. Check for External Games (iFrame Embed)

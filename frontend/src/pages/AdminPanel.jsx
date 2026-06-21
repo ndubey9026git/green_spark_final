@@ -107,15 +107,15 @@ export default function AdminPanel() {
   if (error) return <div className="p-10 text-center text-red-500">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-slate-50 to-white p-4 sm:p-8">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-7xl mx-auto bg-white/80 backdrop-blur-xl border border-emerald-100 shadow-2xl rounded-[32px] p-6">
         <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
-          <h1 className="text-4xl font-bold text-gray-800">🛠️ Admin Panel</h1>
-          <div className="flex items-center gap-2">
-            <Link to="/dashboard" className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition text-sm">
+          <h1 className="text-4xl font-bold text-emerald-950">🛠️ Admin Panel</h1>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link to="/dashboard" className="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-full shadow-lg hover:bg-emerald-700 transition text-sm">
               View Student Dashboard
             </Link>
-            <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition text-sm">
+            <button onClick={handleLogout} className="px-4 py-2 bg-stone-700 text-white font-semibold rounded-full shadow-lg hover:bg-stone-800 transition text-sm">
               Logout
             </button>
           </div>
@@ -124,29 +124,29 @@ export default function AdminPanel() {
         {/* Users Section */}
         <section className="mb-8">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold text-gray-700">User Management</h2>
-            <button onClick={() => setIsUserModalOpen(true)} className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition text-sm">
+            <h2 className="text-2xl font-semibold text-emerald-900">User Management</h2>
+            <button onClick={() => setIsUserModalOpen(true)} className="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-full shadow-lg hover:bg-emerald-700 transition text-sm">
               Create New User
             </button>
           </div>
-          <div className="bg-white rounded-2xl shadow-xl overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+          <div className="bg-emerald-50/80 rounded-3xl shadow-2xl overflow-x-auto border border-emerald-100">
+            <table className="min-w-full divide-y divide-emerald-200">
+              <thead className="bg-emerald-100">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-emerald-700 uppercase">Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-emerald-700 uppercase">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-emerald-700 uppercase">Role</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-emerald-700 uppercase">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white/90 divide-y divide-emerald-200">
                 {users.map((user) => (
                   <tr key={user._id}>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{user.name}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{user.email}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500 capitalize">{user.role}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-emerald-950">{user.name}</td>
+                    <td className="px-6 py-4 text-sm text-emerald-700">{user.email}</td>
+                    <td className="px-6 py-4 text-sm text-emerald-700 capitalize">{user.role}</td>
                     <td className="px-6 py-4 text-center">
-                       <button onClick={() => handleDeleteUser(user._id)} className="text-red-600 hover:text-red-900 font-semibold">Delete</button>
+                       <button onClick={() => handleDeleteUser(user._id)} className="text-amber-700 hover:text-amber-950 font-semibold">Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -158,28 +158,28 @@ export default function AdminPanel() {
         {/* ✅ UPDATED: Challenges Section now has Create and Edit buttons */}
         <section>
            <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold text-gray-700">Challenge Management</h2>
-            <button onClick={() => openChallengeModal()} className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition text-sm">
+            <h2 className="text-2xl font-semibold text-emerald-900">Challenge Management</h2>
+            <button onClick={() => openChallengeModal()} className="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-full shadow-lg hover:bg-emerald-700 transition text-sm">
               Create New Challenge
             </button>
           </div>
-          <div className="bg-white rounded-2xl shadow-xl overflow-x-auto">
-             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+          <div className="bg-emerald-50/80 rounded-3xl shadow-2xl overflow-x-auto border border-emerald-100">
+             <table className="min-w-full divide-y divide-emerald-200">
+              <thead className="bg-emerald-100">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Points</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-emerald-700 uppercase">Title</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-emerald-700 uppercase">Points</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-emerald-700 uppercase">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white/90 divide-y divide-emerald-200">
                 {challenges.map((challenge) => (
                    <tr key={challenge._id}>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{challenge.title}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500 text-center">{challenge.points}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-emerald-950">{challenge.title}</td>
+                    <td className="px-6 py-4 text-sm text-emerald-700 text-center">{challenge.points}</td>
                     <td className="px-6 py-4 text-center text-sm space-x-4">
-                       <button onClick={() => openChallengeModal(challenge)} className="text-blue-600 hover:text-blue-900 font-semibold">Edit</button>
-                       <button onClick={() => handleDeleteChallenge(challenge._id)} className="text-red-600 hover:text-red-900 font-semibold">Delete</button>
+                       <button onClick={() => openChallengeModal(challenge)} className="text-emerald-700 hover:text-emerald-900 font-semibold">Edit</button>
+                       <button onClick={() => handleDeleteChallenge(challenge._id)} className="text-amber-700 hover:text-amber-950 font-semibold">Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -224,16 +224,16 @@ function UserModal({ onClose, onSave }) {
     };
 
     return (
-        <motion.div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} onClick={onClose}>
-            <motion.div className="bg-white rounded-2xl p-6 w-full max-w-md" initial={{scale: 0.8}} animate={{scale: 1}} exit={{scale: 0.8}} onClick={(e) => e.stopPropagation()}>
-                <h2 className="text-2xl font-bold mb-4">Create New User</h2>
+        <motion.div className="fixed inset-0 bg-slate-950/70 z-50 flex items-center justify-center p-4" initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} onClick={onClose}>
+            <motion.div className="bg-white/95 rounded-[28px] p-6 w-full max-w-md shadow-2xl border border-emerald-100" initial={{scale: 0.8}} animate={{scale: 1}} exit={{scale: 0.8}} onClick={(e) => e.stopPropagation()}>
+                <h2 className="text-2xl font-bold mb-4 text-emerald-900">Create New User</h2>
                 <div className="space-y-4">
-                    <div><label className="block text-sm font-medium text-gray-700">Name</label><input type="text" value={name} onChange={e => setName(e.target.value)} className="w-full p-2 mt-1 border rounded-lg"/></div>
-                    <div><label className="block text-sm font-medium text-gray-700">Email</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full p-2 mt-1 border rounded-lg"/></div>
-                    <div><label className="block text-sm font-medium text-gray-700">Password</label><input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full p-2 mt-1 border rounded-lg"/></div>
-                    <div><label className="block text-sm font-medium text-gray-700">Role</label><select value={role} onChange={e => setRole(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-white"><option value="teacher">Teacher</option><option value="student">Student</option><option value="admin">Admin</option></select></div>
+                    <div><label className="block text-sm font-medium text-emerald-700">Name</label><input type="text" value={name} onChange={e => setName(e.target.value)} className="w-full p-3 mt-1 border border-emerald-200 rounded-2xl bg-emerald-50/70 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"/></div>
+                    <div><label className="block text-sm font-medium text-emerald-700">Email</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full p-3 mt-1 border border-emerald-200 rounded-2xl bg-emerald-50/70 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"/></div>
+                    <div><label className="block text-sm font-medium text-emerald-700">Password</label><input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full p-3 mt-1 border border-emerald-200 rounded-2xl bg-emerald-50/70 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"/></div>
+                    <div><label className="block text-sm font-medium text-emerald-700">Role</label><select value={role} onChange={e => setRole(e.target.value)} className="w-full p-3 mt-1 border border-emerald-200 rounded-2xl bg-white"><option value="teacher">Teacher</option><option value="student">Student</option><option value="admin">Admin</option></select></div>
                 </div>
-                <div className="flex justify-end gap-3 mt-6"><button onClick={onClose} className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition">Cancel</button><button onClick={handleSubmit} className="px-4 py-2 text-sm font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 transition">Save User</button></div>
+                <div className="flex justify-end gap-3 mt-6"><button onClick={onClose} className="px-4 py-2 text-sm font-semibold text-emerald-700 bg-emerald-100 rounded-full hover:bg-emerald-200 transition">Cancel</button><button onClick={handleSubmit} className="px-4 py-2 text-sm font-semibold text-white bg-emerald-600 rounded-full hover:bg-emerald-700 transition">Save User</button></div>
             </motion.div>
         </motion.div>
     );
@@ -254,16 +254,16 @@ function ChallengeModal({ challenge, onClose, onSave }) {
     };
     
     return (
-        <motion.div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} onClick={onClose}>
-            <motion.div className="bg-white rounded-2xl p-6 w-full max-w-md" initial={{scale: 0.8}} animate={{scale: 1}} exit={{scale: 0.8}} onClick={(e) => e.stopPropagation()}>
-                <h2 className="text-2xl font-bold mb-4">{challenge ? 'Edit Challenge' : 'Create New Challenge'}</h2>
+        <motion.div className="fixed inset-0 bg-slate-950/70 z-50 flex items-center justify-center p-4" initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} onClick={onClose}>
+            <motion.div className="bg-white/95 rounded-[28px] p-6 w-full max-w-md shadow-2xl border border-emerald-100" initial={{scale: 0.8}} animate={{scale: 1}} exit={{scale: 0.8}} onClick={(e) => e.stopPropagation()}>
+                <h2 className="text-2xl font-bold mb-4 text-emerald-900">{challenge ? 'Edit Challenge' : 'Create New Challenge'}</h2>
                 <div className="space-y-4">
-                    <div><label className="block text-sm font-medium text-gray-700">Title</label><input type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full p-2 mt-1 border rounded-lg"/></div>
-                    <div><label className="block text-sm font-medium text-gray-700">Icon (Emoji)</label><input type="text" value={icon} onChange={e => setIcon(e.target.value)} className="w-full p-2 mt-1 border rounded-lg"/></div>
-                    <div><label className="block text-sm font-medium text-gray-700">Points</label><input type="number" value={points} onChange={e => setPoints(e.target.value)} className="w-full p-2 mt-1 border rounded-lg"/></div>
-                    <div><label className="block text-sm font-medium text-gray-700">Description</label><textarea value={description} onChange={e => setDescription(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" rows="3"></textarea></div>
+                    <div><label className="block text-sm font-medium text-emerald-700">Title</label><input type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full p-3 mt-1 border border-emerald-200 rounded-2xl bg-emerald-50/70 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"/></div>
+                    <div><label className="block text-sm font-medium text-emerald-700">Icon (Emoji)</label><input type="text" value={icon} onChange={e => setIcon(e.target.value)} className="w-full p-3 mt-1 border border-emerald-200 rounded-2xl bg-emerald-50/70 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"/></div>
+                    <div><label className="block text-sm font-medium text-emerald-700">Points</label><input type="number" value={points} onChange={e => setPoints(e.target.value)} className="w-full p-3 mt-1 border border-emerald-200 rounded-2xl bg-emerald-50/70 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"/></div>
+                    <div><label className="block text-sm font-medium text-emerald-700">Description</label><textarea value={description} onChange={e => setDescription(e.target.value)} className="w-full p-3 mt-1 border border-emerald-200 rounded-2xl bg-emerald-50/70 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none" rows="3"></textarea></div>
                 </div>
-                <div className="flex justify-end gap-3 mt-6"><button onClick={onClose} className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition">Cancel</button><button onClick={handleSubmit} className="px-4 py-2 text-sm font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 transition">Save Challenge</button></div>
+                <div className="flex justify-end gap-3 mt-6"><button onClick={onClose} className="px-4 py-2 text-sm font-semibold text-emerald-700 bg-emerald-100 rounded-full hover:bg-emerald-200 transition">Cancel</button><button onClick={handleSubmit} className="px-4 py-2 text-sm font-semibold text-white bg-emerald-600 rounded-full hover:bg-emerald-700 transition">Save Challenge</button></div>
             </motion.div>
         </motion.div>
     );

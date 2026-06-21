@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import API from '../api/api';
+import { API_BASE } from '../config';
 import BackToLearnButton from './BackToLearnButton';
 import './VideoPlayer.css'; // Don't forget to create this file!
 
@@ -54,7 +55,7 @@ const VideoPlayer = () => {
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5 }}
             >
-                <video controls width="100%" height="auto" src={`http://localhost:5000${video.url}`}>
+                <video controls width="100%" height="auto" src={`${API_BASE.replace(/\/api\/?$/, '')}${video.url}`}>
                     Your browser does not support the video tag.
                 </video>
             </motion.div>

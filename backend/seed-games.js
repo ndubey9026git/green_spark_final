@@ -83,6 +83,36 @@ async function seedGames() {
         gameDuration: 60,
         gameUrl: 'https://example.com/ocean-cleanup', // External game URL
         uploadedBy: adminUser._id
+      },
+      {
+        title: 'Renewable Energy Grid Simulator',
+        description: 'Balance solar, wind, and battery storage capacities to design a 100% clean power grid under budget and stability constraints. Track LCOE, grid emissions, and prevent blackouts.',
+        basePoints: 30,
+        maxPollutionGoal: 0,
+        targetHealth: 100,
+        gameDuration: 24,
+        gameUrl: 'GreenGridSandbox',
+        uploadedBy: adminUser._id
+      },
+      {
+        title: 'Direct Air Capture Simulator',
+        description: 'Operate a Direct Air Capture plant. Sorbents, fan flows, heating, and power profiles must be engineered to capture CO2 net-negatively under a $150/ton cost budget.',
+        basePoints: 30,
+        maxPollutionGoal: 0,
+        targetHealth: 100,
+        gameDuration: 24,
+        gameUrl: 'CarbonCaptureSandbox',
+        uploadedBy: adminUser._id
+      },
+      {
+        title: 'Waste-to-Energy Bioreactor',
+        description: 'Operate a municipal anaerobic digestion plant. Settle feedstock ratios, digester temperatures, and CHP turbine outputs to maximize electricity output, offset landfill methane, and achieve positive profit.',
+        basePoints: 30,
+        maxPollutionGoal: 0,
+        targetHealth: 100,
+        gameDuration: 24,
+        gameUrl: 'BioreactorSandbox',
+        uploadedBy: adminUser._id
       }
     ];
 

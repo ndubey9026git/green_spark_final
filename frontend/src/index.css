@@ -1,1 +1,220 @@
-@tailwind base;@tailwind components;@tailwind utilities;html,body,#root{height:100%}body{background:linear-gradient(to right,#ecfccb,#bbf7d0)}
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --eco-bg: #f2f7ef;
+  --eco-surface: rgba(255, 255, 255, 0.84);
+  --eco-surface-strong: rgba(255, 255, 255, 0.92);
+  --eco-border: rgba(255, 255, 255, 0.48);
+  --eco-text: #0c2f1f;
+  --eco-muted: #4a6b55;
+}
+
+html, body, #root {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: radial-gradient(circle at top left, rgba(16, 185, 129, 0.20), transparent 20%),
+              radial-gradient(circle at bottom right, rgba(245, 158, 11, 0.12), transparent 16%),
+              linear-gradient(140deg, #e7f7ed 0%, #d6ead8 36%, #f0f7ef 100%);
+  color: var(--eco-text);
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  overscroll-behavior-x: none;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: transparent;
+}
+
+::selection {
+  background: rgba(16, 185, 129, 0.22);
+  color: #043027;
+}
+
+*:focus-visible {
+  outline: 2px solid rgba(16, 185, 129, 0.8);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #d8f3e3, #b8e3c5);
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #047857);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #047857);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+}
+
+.glass-surface {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  box-shadow: 0 20px 50px rgba(11, 94, 58, 0.09);
+}
+
+.eco-panel {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 2rem;
+  box-shadow: 0 18px 60px rgba(7, 94, 49, 0.12);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+}
+
+.eco-card {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 1.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 18px 40px rgba(9, 79, 41, 0.08);
+}
+
+.eco-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.95rem 1.7rem;
+  font-weight: 700;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.eco-button-primary {
+  background: linear-gradient(135deg, #0f5132 0%, #10b981 100%);
+  color: white;
+  box-shadow: 0 16px 35px rgba(16, 185, 129, 0.22);
+}
+
+.eco-button-secondary {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(16, 129, 50, 0.16);
+  color: #083d29;
+}
+
+.eco-button:hover {
+  transform: translateY(-1px);
+}
+
+.site-shell {
+  min-height: 100vh;
+  padding-bottom: 3rem;
+  background: radial-gradient(circle at top left, rgba(79, 168, 117, 0.12), transparent 24%),
+              linear-gradient(140deg, #f5f3ec 0%, #eff7ee 45%, #f6efe7 100%);
+}
+
+.section-glow {
+  border: 1px solid rgba(124, 180, 131, 0.2);
+  box-shadow: 0 18px 50px rgba(85, 127, 84, 0.08);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #0f5132, #10b981, #fbbf24);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-size: 200% 200%;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.75; }
+  50% { transform: translateY(-18px) rotate(4deg); opacity: 1; }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-24px) scale(1.04); }
+}
+
+.page-enter {
+  animation: pageSlideIn 0.45s ease-out forwards;
+}
+
+@keyframes pageSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-lift {
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 55px rgba(11, 94, 58, 0.15);
+}
+
+@layer utilities {
+  .container-app {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}

@@ -1,0 +1,21 @@
+# Example Render service definition (adjust values before use)
+# See https://render.com/docs/render-yaml for details
+services:
+  - type: web
+    name: greenspark-backend
+    env: node
+    plan: free
+    region: oregon
+    repo: your-git-repo-url
+    branch: main
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: MONGO_URI
+        fromDatabase: YOUR_MONGO_SERVICE_ID
+      - key: JWT_SECRET
+        value: "replace-with-secure-value"
+      - key: ALLOWED_ORIGINS
+        value: "https://your-frontend.example.com"

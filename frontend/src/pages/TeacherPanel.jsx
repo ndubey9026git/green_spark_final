@@ -118,7 +118,7 @@ export default function TeacherPanel() {
 
 
   if (loading) {
-    return <div className="text-center p-10 font-semibold text-gray-500">Loading Student Data...</div>;
+    return <div className="text-center p-10 font-semibold text-emerald-800">Loading Student Data...</div>;
   }
  
   if (error) {
@@ -135,16 +135,16 @@ export default function TeacherPanel() {
   const studentsToShow = view === 'all' ? students : assignedStudents;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-4xl font-bold text-gray-800">Teacher Panel</h1>
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-slate-50 to-white p-4 sm:p-8">
+      <div className="max-w-6xl mx-auto bg-white/80 backdrop-blur-xl border border-emerald-100 rounded-[32px] p-6 shadow-2xl">
+        <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+          <h1 className="text-4xl font-bold text-emerald-950">Teacher Panel</h1>
           <button
             onClick={() => {
               console.log('Navigating to dashboard');
               navigate('/dashboard');
             }}
-            className="px-4 py-2 bg-white text-gray-700 font-semibold rounded-lg shadow-md hover:bg-gray-200 transition"
+            className="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-full shadow-lg hover:bg-emerald-700 transition"
           >
             ← Back to Dashboard
           </button>
@@ -158,33 +158,33 @@ export default function TeacherPanel() {
           <div className="flex items-center gap-2 mb-6">
             <button
               onClick={() => setView('all')}
-              className={`px-4 py-2 font-semibold rounded-lg transition ${view === 'all' ? 'bg-green-600 text-white' : 'bg-white text-gray-700'}`}
+              className={`px-4 py-2 font-semibold rounded-full transition ${view === 'all' ? 'bg-emerald-700 text-white shadow-lg' : 'bg-emerald-100 text-emerald-900'}`}
             >
               All Students ({students.length})
             </button>
             <button
               onClick={() => setView('assigned')}
-              className={`px-4 py-2 font-semibold rounded-lg transition ${view === 'assigned' ? 'bg-green-600 text-white' : 'bg-white text-gray-700'}`}
+              className={`px-4 py-2 font-semibold rounded-full transition ${view === 'assigned' ? 'bg-emerald-700 text-white shadow-lg' : 'bg-emerald-100 text-emerald-900'}`}
             >
               Assigned Students ({assignedStudents.length})
             </button>
             <button
               onClick={() => setShowAnalytics(!showAnalytics)}
-              className={`px-4 py-2 font-semibold rounded-lg transition ${showAnalytics ? 'bg-orange-500 text-white' : 'bg-white text-gray-700'}`}
+              className={`px-4 py-2 font-semibold rounded-full transition ${showAnalytics ? 'bg-amber-500 text-white shadow-lg' : 'bg-emerald-100 text-emerald-900'}`}
             >
               Analytics {showAnalytics ? '▼' : '▶'}
             </button>
 
             <button
               onClick={handleOpenNotificationModal}
-              className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition"
+              className="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-full shadow-lg hover:bg-emerald-700 transition"
             >
               Send Notification
             </button>
 
             <Link
               to="/manage-lessons"
-              className="ml-auto px-4 py-2 font-semibold rounded-lg transition bg-green-600 text-white hover:bg-green-700"
+              className="ml-auto px-4 py-2 font-semibold rounded-full transition bg-amber-500 text-slate-950 hover:bg-amber-600"
             >
               Manage Lessons
             </Link>
@@ -195,48 +195,48 @@ export default function TeacherPanel() {
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-xl p-6 mb-6"
+              className="bg-gradient-to-br from-emerald-100 via-emerald-50 to-white rounded-3xl shadow-2xl p-6 mb-6 border border-emerald-100"
             >
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Class Analytics</h2>
+              <h2 className="text-2xl font-bold text-emerald-950 mb-4">Class Analytics</h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-white p-4 rounded-xl shadow-md text-center">
-                  <p className="text-3xl font-bold text-blue-600">{analytics.totalStudents}</p>
-                  <p className="text-sm text-gray-600">Total Students</p>
+                <div className="bg-white/90 p-4 rounded-2xl shadow-md text-center border border-emerald-100">
+                  <p className="text-3xl font-bold text-emerald-700">{analytics.totalStudents}</p>
+                  <p className="text-sm text-emerald-900">Total Students</p>
                 </div>
-                <div className="bg-white p-4 rounded-xl shadow-md text-center">
-                  <p className="text-3xl font-bold text-green-600">{analytics.avgEcoPoints}</p>
-                  <p className="text-sm text-gray-600">Avg Eco Points</p>
+                <div className="bg-white/90 p-4 rounded-2xl shadow-md text-center border border-emerald-100">
+                  <p className="text-3xl font-bold text-lime-600">{analytics.avgEcoPoints}</p>
+                  <p className="text-sm text-emerald-900">Avg Eco Points</p>
                 </div>
-                <div className="bg-white p-4 rounded-xl shadow-md text-center">
-                  <p className="text-3xl font-bold text-purple-600">{analytics.completionRate}%</p>
-                  <p className="text-sm text-gray-600">Completion Rate</p>
+                <div className="bg-white/90 p-4 rounded-2xl shadow-md text-center border border-emerald-100">
+                  <p className="text-3xl font-bold text-amber-600">{analytics.completionRate}%</p>
+                  <p className="text-sm text-emerald-900">Completion Rate</p>
                 </div>
-                <div className="bg-white p-4 rounded-xl shadow-md text-center">
-                  <p className="text-3xl font-bold text-orange-600">{analytics.activeStreaks}</p>
-                  <p className="text-sm text-gray-600">Active Streaks</p>
+                <div className="bg-white/90 p-4 rounded-2xl shadow-md text-center border border-emerald-100">
+                  <p className="text-3xl font-bold text-teal-600">{analytics.activeStreaks}</p>
+                  <p className="text-sm text-emerald-900">Active Streaks</p>
                 </div>
               </div>
 
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">Top Performers</h3>
-              <div className="bg-white rounded-xl shadow-md overflow-hidden">
+              <h3 className="text-lg font-semibold text-emerald-900 mb-3">Top Performers</h3>
+              <div className="bg-white/90 rounded-2xl shadow-md overflow-hidden border border-emerald-100">
                 <table className="min-w-full">
-                  <thead className="bg-gray-100">
+                  <thead className="bg-emerald-50">
                     <tr>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">Rank</th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">Name</th>
-                      <th className="px-4 py-2 text-center text-sm font-semibold text-gray-600">Eco Points</th>
-                      <th className="px-4 py-2 text-center text-sm font-semibold text-gray-600">Streak</th>
+                      <th className="px-4 py-2 text-left text-sm font-semibold text-emerald-700">Rank</th>
+                      <th className="px-4 py-2 text-left text-sm font-semibold text-emerald-700">Name</th>
+                      <th className="px-4 py-2 text-center text-sm font-semibold text-emerald-700">Eco Points</th>
+                      <th className="px-4 py-2 text-center text-sm font-semibold text-emerald-700">Streak</th>
                     </tr>
                   </thead>
                   <tbody>
                     {analytics.topStudents.map((student, index) => (
-                      <tr key={index} className="border-t border-gray-200">
+                      <tr key={index} className="border-t border-emerald-100 hover:bg-emerald-50">
                         <td className="px-4 py-2 text-sm">
                           {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
                         </td>
-                        <td className="px-4 py-2 text-sm font-medium text-gray-800">{student.name}</td>
-                        <td className="px-4 py-2 text-sm text-center text-green-600 font-semibold">{student.ecoPoints}</td>
-                        <td className="px-4 py-2 text-sm text-center text-orange-500">{student.streak}</td>
+                        <td className="px-4 py-2 text-sm font-medium text-emerald-950">{student.name}</td>
+                        <td className="px-4 py-2 text-sm text-center text-lime-700 font-semibold">{student.ecoPoints}</td>
+                        <td className="px-4 py-2 text-sm text-center text-amber-600">{student.streak}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -245,28 +245,28 @@ export default function TeacherPanel() {
             </motion.div>
           )}
 
-          <div className="bg-white rounded-2xl shadow-xl overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+          <div className="bg-emerald-50/80 rounded-3xl shadow-2xl overflow-x-auto border border-emerald-100">
+            <table className="min-w-full divide-y divide-emerald-200">
+              <thead className="bg-emerald-100">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                  <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Eco Points</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Badges Earned</th>
-                  <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-emerald-700 uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-4 text-center text-xs font-medium text-emerald-700 uppercase tracking-wider">Eco Points</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-emerald-700 uppercase tracking-wider">Badges Earned</th>
+                  <th className="px-6 py-4 text-center text-xs font-medium text-emerald-700 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white/90 divide-y divide-emerald-200">
                 {studentsToShow.map((student) => (
-                  <tr key={student._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{student.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-green-700">{student.ecoPoints}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <tr key={student._id} className="hover:bg-emerald-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-950">{student.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-lime-700">{student.ecoPoints}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-emerald-700">
                       {(student.badges || []).length > 0 ? student.badges.join(', ') : 'None'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                       <button
                         onClick={() => handleOpenAssignModal(student)}
-                        className="px-3 py-1 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition text-xs"
+                        className="px-3 py-1 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition text-xs"
                       >
                         Assign Challenge
                       </button>
@@ -325,25 +325,25 @@ function AssignmentModal({ student, challenges, onClose, onAssign }) {
 
   return (
      <motion.div 
-      className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-slate-950/70 z-50 flex items-center justify-center p-4"
       initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}
       onClick={onClose}
     >
         <motion.div
-            className="bg-white rounded-2xl p-6 w-full max-w-lg"
+            className="bg-white/95 rounded-[28px] p-6 w-full max-w-lg shadow-2xl border border-emerald-100"
             initial={{scale: 0.8, y: 50}} animate={{scale: 1, y: 0}} exit={{scale: 0.8, y: 50}}
             onClick={(e) => e.stopPropagation()}
         >
-            <h2 className="text-2xl font-bold mb-2">Assign Challenge</h2>
-            <p className="mb-6 text-gray-600">Assign a new task to <span className="font-semibold">{student.name}</span>.</p>
+            <h2 className="text-2xl font-bold mb-2 text-emerald-900">Assign Challenge</h2>
+            <p className="mb-6 text-emerald-700">Assign a new task to <span className="font-semibold text-emerald-900">{student.name}</span>.</p>
             
             <div className="space-y-4">
                <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">Challenge</label>
+                 <label className="block text-sm font-medium text-emerald-700 mb-1">Challenge</label>
                  <select
                    value={selectedChallengeId}
                    onChange={(e) => setSelectedChallengeId(e.target.value)}
-                   className="w-full p-2 border border-gray-300 rounded-lg bg-white"
+                   className="w-full p-3 border border-emerald-200 rounded-2xl bg-emerald-50/80 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
                  >
                    <option value="" disabled>Select a challenge...</option>
                    {challenges.map(challenge => (
@@ -355,12 +355,12 @@ function AssignmentModal({ student, challenges, onClose, onAssign }) {
                </div>
                
                <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">Due Date (Optional)</label>
+                 <label className="block text-sm font-medium text-emerald-700 mb-1">Due Date (Optional)</label>
                  <input 
                     type="date" 
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg"
+                    className="w-full p-3 border border-emerald-200 rounded-2xl bg-emerald-50/80 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
                  />
                </div>
             </div>
@@ -368,13 +368,13 @@ function AssignmentModal({ student, challenges, onClose, onAssign }) {
             <div className="flex gap-3 mt-6">
                 <button 
                     onClick={onClose}
-                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition"
+                    className="flex-1 px-4 py-2 bg-emerald-100 text-emerald-900 font-semibold rounded-full hover:bg-emerald-200 transition"
                 >
                     Cancel
                 </button>
                 <button 
                     onClick={handleSubmit}
-                    className="flex-1 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
+                    className="flex-1 px-4 py-2 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition"
                 >
                     Assign
                 </button>
@@ -405,22 +405,22 @@ function NotificationModal({ students, onClose, onSend }) {
       onClick={onClose}
     >
       <motion.div
-        className="bg-white rounded-2xl p-6 w-full max-w-xl"
+        className="bg-white/95 rounded-[28px] p-6 w-full max-w-xl shadow-2xl border border-emerald-100"
         initial={{ scale: 0.8, y: 50 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.8, y: 50 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-2xl font-bold mb-2">Send Notification</h2>
-        <p className="mb-4 text-gray-600">Notify one or all students with an update.</p>
+        <h2 className="text-2xl font-bold mb-2 text-emerald-900">Send Notification</h2>
+        <p className="mb-4 text-emerald-700">Notify one or all students with an update.</p>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Recipient</label>
+            <label className="block text-sm font-medium text-emerald-700 mb-1">Recipient</label>
             <select
               value={recipient}
               onChange={(e) => setRecipient(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg bg-white"
+              className="w-full p-3 border border-emerald-200 rounded-2xl bg-emerald-50/80 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
             >
               <option value="all">All Students</option>
               {students.map((student) => (
@@ -430,11 +430,11 @@ function NotificationModal({ students, onClose, onSend }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Notification Type</label>
+            <label className="block text-sm font-medium text-emerald-700 mb-1">Notification Type</label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg bg-white"
+              className="w-full p-3 border border-emerald-200 rounded-2xl bg-emerald-50/80 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
             >
               <option value="announcement">Announcement</option>
               <option value="assignment">Assignment</option>
@@ -444,31 +444,31 @@ function NotificationModal({ students, onClose, onSend }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+            <label className="block text-sm font-medium text-emerald-700 mb-1">Title</label>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-emerald-200 rounded-2xl bg-emerald-50/80 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
               placeholder="Enter a short title"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+            <label className="block text-sm font-medium text-emerald-700 mb-1">Message</label>
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg min-h-[120px]"
+              className="w-full p-3 border border-emerald-200 rounded-2xl bg-emerald-50/80 min-h-[120px] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
               placeholder="Type the notification message here"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Optional Link</label>
+            <label className="block text-sm font-medium text-emerald-700 mb-1">Optional Link</label>
             <input
               value={link}
               onChange={(e) => setLink(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-emerald-200 rounded-2xl bg-emerald-50/80 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
               placeholder="/student/assignments or another internal path"
             />
           </div>
@@ -477,13 +477,13 @@ function NotificationModal({ students, onClose, onSend }) {
         <div className="flex gap-3 mt-6">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition"
+            className="flex-1 px-4 py-2 bg-emerald-100 text-emerald-900 font-semibold rounded-full hover:bg-emerald-200 transition"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+            className="flex-1 px-4 py-2 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition"
           >
             Send Notification
           </button>
@@ -499,7 +499,7 @@ function Toast({ message }) {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 50 }}
-      className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg"
+      className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-emerald-900 text-white px-6 py-3 rounded-full shadow-2xl"
     >
       {message}
     </motion.div>
