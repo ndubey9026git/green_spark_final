@@ -43,7 +43,22 @@ const corsOptions = {
   origin: (origin, callback) => {
     // Allow requests with no origin (like server-to-server or curl)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(normalizeOrigin(origin))) return callback(null, true);
+
+    const origNorm = normalizeOrigin(origin);
+    try {
+      const hostname = new URL(origNorm).hostname;
+      // Allow exact matches from config
+      if (allowedOrigins.includes(origNorm) || allowedOrigins.includes(hostname)) {
+        return callback(null, true);
+      }
+      // Allow Vercel preview/domains if explicitly enabled
+      if (process.env.ALLOW_VERCEL === 'true' && hostname.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+    } catch (e) {
+      // If origin can't be parsed, fall through to block
+    }
+
     console.warn(`Blocked CORS request from origin: ${origin}`);
     return callback(new Error('Not allowed by CORS'));
   },
